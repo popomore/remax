@@ -23,28 +23,10 @@ async function createTemplate(pageFile: string, adapter: Adapter) {
         `base${adapter.extensions.template}`
       )
     ),
-    jsHelper: winPath(
-      path.relative(
-        path.dirname(pageFile),
-        `helper${adapter.extensions.jsHelper}`
-      )
-    ),
   });
 
   return {
     fileName,
-    isAsset: true as true,
-    source: code,
-  };
-}
-
-async function createHelperFile(adapter: Adapter) {
-  const code: string = await ejs.renderFile(adapter.templates.jsHelper, {
-    target: adapter.name,
-  });
-
-  return {
-    fileName: `helper${adapter.extensions.jsHelper}`,
     isAsset: true as true,
     source: code,
   };
@@ -166,9 +148,6 @@ export default function template(
 
       const template = await createBaseTemplate(adapter, options);
       bundle[template.fileName] = template;
-
-      const helperFile = await createHelperFile(adapter);
-      bundle[helperFile.fileName] = helperFile;
 
       const entries = getEntries(options, adapter, context);
       const { pages } = entries;

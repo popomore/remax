@@ -51,21 +51,10 @@ export default class Container {
   applyUpdate() {
     const startTime = new Date().getTime();
 
-    const action = {
-      type: 'splice',
-      payload: this.updateQueue.map(update => ({
-        path: stringPath(update.path),
-        start: update.start,
-        deleteCount: update.deleteCount,
-        item: update.items[0],
-      })),
-    };
-
-    this.context.setData({ action }, () => {
+    this.context.setData({ root: this.root.toJSON() }, () => {
       if (process.env.REMAX_DEBUG) {
         console.log(
-          `setData => 回调时间：${new Date().getTime() - startTime}ms`,
-          action
+          `setData => 回调时间：${new Date().getTime() - startTime}ms`
         );
       }
     });
